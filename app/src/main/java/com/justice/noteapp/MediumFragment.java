@@ -19,13 +19,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import static com.justice.noteapp.MainActivity.COLLECTION_MEDIUM;
+import static com.justice.noteapp.MainActivity.COLLECTION_NOTES;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MediumFragment extends Fragment {
 
-    private FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
 
@@ -44,17 +47,17 @@ public class MediumFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView=view.findViewById(R.id.recyclerView);
-recyclerView.setHasFixedSize(true);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
         setUpFirestore();
 
     }
 
     private void setUpFirestore() {
-        Query query = firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("medium");
+        Query query = firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM);
 
 
-        FirestoreRecyclerOptions<Note> firestoreRecyclerOptions=new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, new SnapshotParser<Note>() {
+        FirestoreRecyclerOptions<Note> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, new SnapshotParser<Note>() {
             @NonNull
             @Override
             public Note parseSnapshot(@NonNull DocumentSnapshot snapshot) {

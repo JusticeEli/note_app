@@ -3,6 +3,7 @@ package com.justice.noteapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,18 +13,25 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import static com.justice.noteapp.MainActivity.COLLECTION_HIGH;
+import static com.justice.noteapp.MainActivity.COLLECTION_LOW;
+import static com.justice.noteapp.MainActivity.COLLECTION_MEDIUM;
+import static com.justice.noteapp.MainActivity.COLLECTION_NOTES;
+
 public class AddNoteActivity extends AppCompatActivity {
 
     private TextInputLayout noteTxtInput;
     private Spinner categorySpinner;
-    private FloatingActionButton cancelFob;
-    private FloatingActionButton doneFob;
+    private ExtendedFloatingActionButton cancelFob;
+    private ExtendedFloatingActionButton doneFob;
+    private ProgressDialog progressDialog;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -96,6 +104,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
         Note note = new Note();
         note.setNoteData(noteData);
+
         if (updating) {
             updateNote(note);
         } else {
@@ -107,10 +116,11 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void updateNote(Note note) {
+        progressDialog.show();
         switch (categorySpinner.getSelectedItemPosition()) {
             case 0:
                 note.setCategory(0);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("medium").document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -119,13 +129,13 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
+                        progressDialog.dismiss();
                     }
                 });
                 break;
             case 1:
                 note.setCategory(1);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("high").document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -134,13 +144,13 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
+                        progressDialog.dismiss();
                     }
                 });
                 break;
             case 2:
                 note.setCategory(2);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("low").document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -149,7 +159,7 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
+                        progressDialog.dismiss();
                     }
                 });
                 break;
@@ -158,10 +168,11 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void setNoteCategoryAndSaveToFirebase(Note note) {
+        progressDialog.show();
         switch (categorySpinner.getSelectedItemPosition()) {
             case 0:
                 note.setCategory(0);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("medium").add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM).add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
@@ -170,12 +181,13 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                        progressDialog.dismiss();
                     }
                 });
                 break;
             case 1:
                 note.setCategory(1);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("high").add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH).add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
@@ -184,12 +196,13 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                        progressDialog.dismiss();
                     }
                 });
                 break;
             case 2:
                 note.setCategory(2);
-                firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("low").add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).add(note).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
@@ -198,6 +211,7 @@ public class AddNoteActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                        progressDialog.dismiss();
                     }
                 });
                 break;
@@ -210,5 +224,10 @@ public class AddNoteActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
         cancelFob = findViewById(R.id.cancelFob);
         doneFob = findViewById(R.id.doneFob);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("saving data...");
     }
 }
+

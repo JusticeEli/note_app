@@ -19,6 +19,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import static com.justice.noteapp.MainActivity.COLLECTION_HIGH;
+import static com.justice.noteapp.MainActivity.COLLECTION_NOTES;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +56,7 @@ public class HighFragment extends Fragment {
     }
 
     private void setUpFirestore() {
-        Query query = firebaseFirestore.collection("Notes").document(FirebaseAuth.getInstance().getUid()).collection("high");
+        Query query = firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH);
 
 
         FirestoreRecyclerOptions<Note> firestoreRecyclerOptions=new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, new SnapshotParser<Note>() {

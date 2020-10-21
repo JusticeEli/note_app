@@ -11,5 +11,9 @@
         android:icon="@drawable/ic_create"
         android:title="add note"
         app:showAsAction="always" />
-
+  <!--  <item
+        android:id="@+id/logoutMenu"
+        android:title="logout"
+        app:showAsAction="never" />
+-->
 </menu>

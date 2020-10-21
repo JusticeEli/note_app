@@ -3,10 +3,13 @@ package com.justice.noteapp;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,8 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.ViewHolder> {
+    private static final String TAG = "NoteAdapter";
     private Context context;
 
     public NoteAdapter(Context context, @NonNull FirestoreRecyclerOptions<Note> options) {
@@ -42,12 +48,12 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
-        private View itemView;
+        private ImageView imageViewDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            textView = itemView.findViewById(R.id.noteTxtView);
+             textView = itemView.findViewById(R.id.noteTxtView);
+             imageViewDelete = itemView.findViewById(R.id.imageViewDelete);
 
             setOnClickListeners();
 
@@ -59,6 +65,23 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.View
                 public void onClick(View v) {
                     ApplicationClass.documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
                     context.startActivity(new Intent(context, NoteActivity.class));
+                }
+            });
+
+            imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getSnapshots().getSnapshot(getAdapterPosition()).getReference().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Log.d(TAG, "onComplete: deletion success");
+                            }else {
+                                Log.d(TAG, "onComplete: deletion failed error: "+task.getException().getMessage());
+
+                            }
+                        }
+                    });
                 }
             });
 
