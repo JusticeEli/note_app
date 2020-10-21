@@ -50,8 +50,10 @@ public class HighFragment extends Fragment {
         recyclerView=view.findViewById(R.id.recyclerView);
 
         recyclerView.setHasFixedSize(true);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            setUpFirestore();
 
-        setUpFirestore();
+        }
 
     }
 

@@ -63,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
         initWidgets();
         setUpViewPager();
         setOnClickListeners();
-        //    setBadgeUpdateListener();
 
-    }
+    /*    startActivity(new Intent(this, AddNoteActivity.class));
+        Log.d(TAG, "onCreate: this is the end");
+   */ }
 
     private void checkIfWeAreLoginIn() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                             .setTosAndPrivacyPolicyUrls("https://www.linkedin.com/in/JusticeEli",
                                     "https://github.com/JusticeEli/").build(),
                     RC_SIGN_IN);
-            finish();
+
         } else {
             setBadgeUpdateListener();
         }
@@ -96,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
             // Successfully signed in
             if (resultCode == RESULT_OK) {
+                recreate();
+                Log.d(TAG, "onActivityResult: sign in success");
                 return;
             } else {
                 // Sign in failed
@@ -110,10 +113,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 showToast("unknown error");
                 Log.e(TAG, "Sign-in error: ", response.getError());
+                Log.d(TAG, "onActivityResult: finish of onActivityResult");
+                finish();
 
             }
         }
-        finish();
     }
 
     private void showToast(String message) {
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     private void setBadgeUpdateListener() {
 
 
-        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM).addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH).addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -153,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -200,6 +204,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpViewPager() {
+        //incase oncreate has been called more than one time resulting to many tabs
+        fragments.clear();
+        fragmentsName.clear();
+
+
         fragments.add(mediumFragment);
         fragments.add(highFragment);
         fragments.add(lowFragment);
@@ -249,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
                         // user is now signed out
+                        Log.d(TAG, "onComplete: finish of logout");
                         finish();
                     }
                 });

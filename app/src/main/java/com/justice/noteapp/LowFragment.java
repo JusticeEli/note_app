@@ -49,7 +49,10 @@ public class LowFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView=view.findViewById(R.id.recyclerView);
 recyclerView.setHasFixedSize(true);
-        setUpFirestore();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            setUpFirestore();
+
+        }
 
     }
 

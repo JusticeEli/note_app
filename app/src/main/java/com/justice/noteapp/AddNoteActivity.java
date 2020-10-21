@@ -120,7 +120,7 @@ public class AddNoteActivity extends AppCompatActivity {
         switch (categorySpinner.getSelectedItemPosition()) {
             case 0:
                 note.setCategory(0);
-                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_MEDIUM).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                ApplicationClass.documentSnapshot.getReference().set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -135,7 +135,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 break;
             case 1:
                 note.setCategory(1);
-                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_HIGH).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                ApplicationClass.documentSnapshot.getReference().set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -150,7 +150,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 break;
             case 2:
                 note.setCategory(2);
-                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                ApplicationClass.documentSnapshot.getReference().set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -164,6 +164,22 @@ public class AddNoteActivity extends AppCompatActivity {
                 });
                 break;
 
+
+          /*  case 2:
+                note.setCategory(2);
+                firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW).document(noteOriginal.getId()).set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AddNoteActivity.this, "Note Saved", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(AddNoteActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+                break;*/
         }
     }
 

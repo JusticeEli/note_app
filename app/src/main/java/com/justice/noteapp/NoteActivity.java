@@ -46,8 +46,10 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.editMenu) {
             startActivity(new Intent(this, AddNoteActivity.class));
+            finish();
         } else if (item.getItemId() == R.id.deleteMenu) {
             deleteNote();
+            finish();
         }
         return super.onOptionsItemSelected(item);
 
