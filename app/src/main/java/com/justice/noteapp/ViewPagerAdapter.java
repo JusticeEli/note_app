@@ -5,8 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
 
@@ -17,18 +18,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return MainActivity.fragments.get(position);
+        return MainFragment.fragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return MainActivity.fragments.size();
+        return MainFragment.fragments.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-          return MainActivity.fragmentsName.get(position);
+          return MainFragment.fragmentsName.get(position);
 
     }
 }

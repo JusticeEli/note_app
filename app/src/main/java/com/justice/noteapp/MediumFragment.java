@@ -19,8 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static com.justice.noteapp.MainActivity.COLLECTION_MEDIUM;
-import static com.justice.noteapp.MainActivity.COLLECTION_NOTES;
+import static com.justice.noteapp.MainFragment.COLLECTION_MEDIUM;
+import static com.justice.noteapp.MainFragment.COLLECTION_NOTES;
 
 
 /**
@@ -30,7 +30,7 @@ public class MediumFragment extends Fragment {
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private RecyclerView recyclerView;
-    private NoteAdapter noteAdapter;
+    public NoteAdapter noteAdapter;
 
     public MediumFragment() {
         // Required empty public constructor
@@ -73,6 +73,5 @@ public class MediumFragment extends Fragment {
         noteAdapter = new NoteAdapter(getActivity(), firestoreRecyclerOptions);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(noteAdapter);
-
     }
 }

@@ -19,8 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static com.justice.noteapp.MainActivity.COLLECTION_LOW;
-import static com.justice.noteapp.MainActivity.COLLECTION_NOTES;
+import static com.justice.noteapp.MainFragment.COLLECTION_LOW;
 
 
 /**
@@ -57,7 +56,7 @@ recyclerView.setHasFixedSize(true);
     }
 
     private void setUpFirestore() {
-        Query query = firebaseFirestore.collection(COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW);
+        Query query = firebaseFirestore.collection(MainFragment.COLLECTION_NOTES).document(FirebaseAuth.getInstance().getUid()).collection(COLLECTION_LOW);
 
 
         FirestoreRecyclerOptions<Note> firestoreRecyclerOptions=new FirestoreRecyclerOptions.Builder<Note>().setQuery(query, new SnapshotParser<Note>() {

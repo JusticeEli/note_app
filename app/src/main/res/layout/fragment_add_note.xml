@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".NoteActivity">
+    android:theme="@style/AppTheme"
+    tools:context=".AddNoteFragment">
 
     <Spinner
         android:id="@+id/categorySpinner"
